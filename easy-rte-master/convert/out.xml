@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EnforcedFunction Name="ab5">
+	<Interface>
+		<Input Name="A" Type="bool" Constant="false" Comment=""></Input>
+		<Input Name="C" Type="bool" Constant="false" Comment=""></Input>
+		<Output Name="B" Type="bool" Constant="false" Comment=""></Output>
+	</Interface>
+	<Policy Name="AB5">
+		<InternalVars>
+			<VarDeclaration Name="v" Type="dtimer_t" Constant="false" Comment=""></VarDeclaration>
+		</InternalVars>
+		<Machine>
+			<PState>s0</PState>
+			<PState>s1</PState>
+			<PTransition>
+				<Source>s0</Source>
+				<Destination>s0</Destination>
+				<Condition>( !A and !B )</Condition>
+				<Expressions>
+					<VarName>v</VarName>
+					<Value>0</Value>
+				</Expressions>
+			</PTransition>
+			<PTransition>
+				<Source>s0</Source>
+				<Destination>s1</Destination>
+				<Condition>( A and !B )</Condition>
+				<Expressions>
+					<VarName>v</VarName>
+					<Value>0</Value>
+				</Expressions>
+			</PTransition>
+			<PTransition>
+				<Source>s1</Source>
+				<Destination>s1</Destination>
+				<Condition>( !A and !B and v &lt; 5 )</Condition>
+			</PTransition>
+			<PTransition>
+				<Source>s1</Source>
+				<Destination>s0</Destination>
+				<Condition>( !A and B )</Condition>
+			</PTransition>
+			<PTransition>
+				<Source>s0</Source>
+				<Destination>violation</Destination>
+				<Condition>( ( !A and B ) or ( A and B ) )</Condition>
+				<Recover>
+					<VarName>B</VarName>
+					<Value>0</Value>
+				</Recover>
+			</PTransition>
+			<PTransition>
+				<Source>s1</Source>
+				<Destination>violation</Destination>
+				<Condition>v &gt;= 5</Condition>
+				<Recover>
+					<VarName>B</VarName>
+					<Value>1</Value>
+				</Recover>
+			</PTransition>
+			<PTransition>
+				<Source>s1</Source>
+				<Destination>violation</Destination>
+				<Condition>A</Condition>
+				<Recover>
+					<VarName>A</VarName>
+					<Value>0</Value>
+				</Recover>
+			</PTransition>
+		</Machine>
+	</Policy>
+</EnforcedFunction>

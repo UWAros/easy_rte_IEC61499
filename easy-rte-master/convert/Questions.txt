@@ -1,0 +1,5 @@
+1. Input/output event and input/output variables?
+
+2. violation state
+
+3. Recover, Expression, Algorithm
